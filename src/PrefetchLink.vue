@@ -41,12 +41,10 @@ interface RouterLinkProps extends RouterLinkOptions {
   | 'time'
   | 'true'
   | 'false'
-}
-interface PrefetchLinkProps {
   type?: 'view' | 'hover'
 }
 
-const props = defineProps<RouterLinkProps & PrefetchLinkProps>()
+const props = defineProps<RouterLinkProps>()
 
 const link = reactive(useLink(props))
 

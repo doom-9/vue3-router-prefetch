@@ -7,11 +7,12 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/main.ts'),
-      name: 'MyLib',
-      // the proper extensions will be added
+      formats: ['es'],
       fileName: 'my-lib',
+    },
+    rollupOptions: {
+      external: ['vue', 'vue-router'],
     },
   },
 })
