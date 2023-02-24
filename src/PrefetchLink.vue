@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import type { RouteComponent, RouteLocation } from 'vue-router'
-import { RouterLink } from 'vue-router'
-import { defineProps, inject, ref, watchEffect } from 'vue'
+import type { RouteComponent } from 'vue-router'
+import { RouterLink, useLink } from 'vue-router'
+import {
+  defineProps,
+  inject,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  watchEffect,
+} from 'vue'
 import type { Lazy, RouterLinkOptions } from './type'
 import { isRouteComponent, linkProvideKey } from './type'
+import { beginObserve, stopObserve } from './observer'
 
 interface RouterLinkProps extends RouterLinkOptions {
   /**
@@ -39,7 +48,11 @@ interface PrefetchLinkProps {
 
 const props = defineProps<RouterLinkProps & PrefetchLinkProps>()
 
+const link = reactive(useLink(props))
+
 const linkInjectValue = inject(linkProvideKey)
+
+const linkElementRef = ref<null | HTMLAnchorElement>(null)
 
 const mergedType = ref<'view' | 'hover'>('hover')
 
@@ -49,12 +62,8 @@ watchEffect(() => {
   else mergedType.value = linkInjectValue?.type || 'hover'
 })
 
-const handleMouseEnter = (
-  route: RouteLocation & {
-    href: string
-  },
-) => {
-  const { matched } = route
+const handleMouseEnter = () => {
+  const { matched } = link.route
 
   for (const record of matched) {
     if (!record.components && !record.children.length)
@@ -68,6 +77,29 @@ const handleMouseEnter = (
     }
   }
 }
+
+onMounted(() => {
+  watchEffect(() => {
+    if (linkElementRef.value) {
+      if (mergedType.value === 'view') {
+        linkElementRef.value.removeEventListener(
+          'mouseenter',
+          handleMouseEnter,
+        )
+        beginObserve(linkElementRef.value, handleMouseEnter)
+      }
+      else {
+        linkElementRef.value.addEventListener('mouseenter', handleMouseEnter)
+        stopObserve(linkElementRef.value)
+      }
+    }
+  })
+})
+
+onUnmounted(() => {
+  if (linkElementRef.value)
+    stopObserve(linkElementRef.value)
+})
 </script>
 
 <script lang="ts">
@@ -85,9 +117,9 @@ export default {
   >
     <a
       v-bind="$attrs"
+      ref="linkElementRef"
       :href="href"
       :class="isActive ? activeClass : exactActiveClass"
-      @mouseenter="handleMouseEnter(route)"
       @click="navigate"
     >
       <slot />
