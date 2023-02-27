@@ -8,6 +8,14 @@
   >
     two
   </router-link>
+  <router-link
+    :to="{
+      path: '/three',
+    }"
+    type="view"
+  >
+    two
+  </router-link>
   <router-view />
 </template>
 
