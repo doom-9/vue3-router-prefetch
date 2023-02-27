@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { RouteComponent, RouteLocationRaw } from 'vue-router'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useLink } from 'vue-router'
 import {
   defineProps,
   inject,
   onMounted,
   onUnmounted,
+  reactive,
   ref,
-  unref,
   watchEffect,
 } from 'vue'
 import type { Lazy } from '../type'
@@ -54,7 +54,7 @@ interface RouterLinkProps {
 
 const props = defineProps<RouterLinkProps>()
 
-const router = useRouter()
+const link = reactive(useLink(props))
 
 const linkInjectValue = inject(linkProvideKey)
 
@@ -73,9 +73,7 @@ const handleMouseEnter = () => {
   if (!to)
     return
 
-  const route = router.resolve(unref(props.to))
-
-  const { matched } = route
+  const { matched } = link.route
 
   for (const record of matched) {
     if (!record.components && !record.children.length)
