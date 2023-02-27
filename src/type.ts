@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
 import type { RouteComponent, RouteLocationRaw } from 'vue-router'
-import type { pluginOptions } from './main'
+import type { pluginOptions } from './lib'
 
 export interface RouterLinkOptions {
   /**

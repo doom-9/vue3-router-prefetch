@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { RouteComponent } from 'vue-router'
-import { RouterLink, useLink } from 'vue-router'
+import type { RouteComponent, RouteLocationRaw } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import {
   defineProps,
   inject,
   onMounted,
   onUnmounted,
-  reactive,
   ref,
+  unref,
   watchEffect,
 } from 'vue'
-import type { Lazy, RouterLinkOptions } from './type'
-import { isRouteComponent, linkProvideKey } from './type'
-import { beginObserve, stopObserve } from './observer'
+import type { Lazy } from '../type'
+import { isRouteComponent, linkProvideKey } from '../type'
+import { beginObserve, stopObserve } from '../observer'
 
-interface RouterLinkProps extends RouterLinkOptions {
+interface RouterLinkProps {
   /**
    * Whether RouterLink should not wrap its content in an `a` tag. Useful when
    * using `v-slot` to create a custom RouterLink
@@ -41,12 +41,20 @@ interface RouterLinkProps extends RouterLinkOptions {
   | 'time'
   | 'true'
   | 'false'
+  /**
+   * Route Location the link should navigate to when clicked on.
+   */
+  to: RouteLocationRaw
+  /**
+   * Calls `router.replace` instead of `router.push`.
+   */
+  replace?: boolean
   type?: 'view' | 'hover'
 }
 
 const props = defineProps<RouterLinkProps>()
 
-const link = reactive(useLink(props))
+const router = useRouter()
 
 const linkInjectValue = inject(linkProvideKey)
 
@@ -61,7 +69,13 @@ watchEffect(() => {
 })
 
 const handleMouseEnter = () => {
-  const { matched } = link.route
+  const { to } = props
+  if (!to)
+    return
+
+  const route = router.resolve(unref(props.to))
+
+  const { matched } = route
 
   for (const record of matched) {
     if (!record.components && !record.children.length)
@@ -108,11 +122,7 @@ export default {
 </script>
 
 <template>
-  <RouterLink
-    v-slot="{ isActive, href, navigate, route }"
-    v-bind="props"
-    custom
-  >
+  <RouterLink v-slot="{ isActive, href, navigate }" v-bind="props" custom>
     <a
       v-bind="$attrs"
       ref="linkElementRef"
