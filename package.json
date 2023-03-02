@@ -1,15 +1,27 @@
 {
   "name": "vue3-router-prefetch",
-  "version": "1.6.0",
   "type": "module",
-  "main": "./dist/lib.js",
-  "module": "./dist/lib.js",
-  "types": "./dist/lib.d.ts",
+  "version": "1.6.0",
+  "homepage": "https://github.com/doom-9/vue3-router-prefetch/blob/main/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doom-9/vue3-router-prefetch.git"
   },
-  "homepage": "https://github.com/doom-9/vue3-router-prefetch/blob/main/README.md",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/lib.d.ts",
+      "require": "./dist/lib.cjs",
+      "import": "./dist/lib.js"
+    },
+    "./*": "./*"
+  },
+  "main": "./dist/lib.js",
+  "module": "./dist/lib.js",
+  "types": "./dist/lib.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
@@ -19,19 +31,11 @@
     "cypress:open": "cypress open",
     "publish": "vue-tsc && vite build && np --no-tests --no-publish"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/lib.d.ts",
-      "require": "./dist/lib.cjs",
-      "import": "./dist/lib.js"
-    },
-    "./*": "./*"
-  },
-  "dependencies": {
+  "peerDependencies": {
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
-  "peerDependencies": {
+  "dependencies": {
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
@@ -41,6 +45,7 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "cypress": "^12.7.0",
     "eslint": "^8.34.0",
+    "lint-staged": "^13.1.2",
     "np": "^7.6.3",
     "simple-git-hooks": "^2.8.1",
     "typescript": "^4.9.3",
@@ -51,10 +56,6 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
