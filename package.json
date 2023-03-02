@@ -1,6 +1,5 @@
 {
   "name": "vue3-router-prefetch",
-  "private": true,
   "version": "1.2.0",
   "type": "module",
   "main": "lib.umd.cjs",
