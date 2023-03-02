@@ -69,3 +69,24 @@ app.use(RouterPrefetch, {
 - Default: `0` (ms)
 
 Timeout after which prefetching will occur.
+It can also be defined globally:
+
+```js
+app.use(RouterPrefetch, {
+  timeout: 100,
+})
+```
+
+### forcedPull
+
+- Type: `boolean`
+- Default: `false`
+
+When set to false, asynchronous resources are pulled when the browser is idle.
+It can also be defined globally:
+
+```js
+app.use(RouterPrefetch, {
+  forcedPull: true,
+})
+```

@@ -4,7 +4,9 @@ import { linkProvideKey } from './type'
 
 export interface pluginOptions {
   type: 'view' | 'hover' | 'none'
-  name: string
+  name?: string
+  forcedPull?: boolean
+  timeout?: number
 }
 
 export default {

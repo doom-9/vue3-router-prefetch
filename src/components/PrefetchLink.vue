@@ -51,6 +51,7 @@ interface RouterLinkProps {
   replace?: boolean
   type?: 'view' | 'hover' | 'none'
   timeout?: number
+  forcedPull?: boolean
 }
 
 const props = defineProps<RouterLinkProps>()
@@ -61,16 +62,30 @@ const linkInjectValue = inject(linkProvideKey)
 
 const linkElementRef = ref<null | HTMLAnchorElement>(null)
 
-const mergedType = ref<'view' | 'hover' | 'none'>('hover')
+const mergedType = ref<'view' | 'hover' | 'none'>('view')
+
+const mergedTimeout = ref(0)
+
+const mergedForcedPull = ref(false)
 
 watchEffect(() => {
   if (props.type)
     mergedType.value = props.type
   else mergedType.value = linkInjectValue?.type || 'view'
+
+  if (typeof props.timeout === 'number')
+    mergedTimeout.value = props.timeout
+  else if (typeof linkInjectValue?.timeout === 'number')
+    mergedTimeout.value = linkInjectValue?.timeout
+
+  if (typeof props.forcedPull === 'boolean')
+    mergedForcedPull.value = props.forcedPull
+  else if (typeof linkInjectValue?.forcedPull === 'boolean')
+    mergedForcedPull.value = linkInjectValue?.forcedPull
 })
 
 const handleMouseEnter = () => {
-  const { to, timeout = 0 } = props
+  const { to } = props
   if (!to)
     return
 
@@ -84,9 +99,18 @@ const handleMouseEnter = () => {
       const rawComponent = record.components[name]
 
       if (!isRouteComponent(rawComponent)) {
-        setTimeout(() => {
-          (rawComponent as Lazy<RouteComponent>)()
-        }, timeout)
+        if (mergedForcedPull.value) {
+          setTimeout(() => {
+            (rawComponent as Lazy<RouteComponent>)()
+          }, mergedTimeout.value)
+        }
+        else {
+          window.requestIdleCallback(() => {
+            setTimeout(() => {
+              (rawComponent as Lazy<RouteComponent>)()
+            }, mergedTimeout.value)
+          })
+        }
       }
     }
   }
