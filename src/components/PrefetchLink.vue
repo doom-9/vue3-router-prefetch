@@ -49,7 +49,7 @@ interface RouterLinkProps {
    * Calls `router.replace` instead of `router.push`.
    */
   replace?: boolean
-  type?: 'view' | 'hover'
+  type?: 'view' | 'hover' | 'none'
 }
 
 const props = defineProps<RouterLinkProps>()
@@ -60,7 +60,7 @@ const linkInjectValue = inject(linkProvideKey)
 
 const linkElementRef = ref<null | HTMLAnchorElement>(null)
 
-const mergedType = ref<'view' | 'hover'>('hover')
+const mergedType = ref<'view' | 'hover' | 'none'>('hover')
 
 watchEffect(() => {
   if (props.type)
@@ -98,8 +98,15 @@ onMounted(() => {
         )
         beginObserve(linkElementRef.value, handleMouseEnter)
       }
-      else {
+      else if (mergedType.value === 'hover') {
         linkElementRef.value.addEventListener('mouseenter', handleMouseEnter)
+        stopObserve(linkElementRef.value)
+      }
+      else if (mergedType.value === 'none') {
+        linkElementRef.value.removeEventListener(
+          'mouseenter',
+          handleMouseEnter,
+        )
         stopObserve(linkElementRef.value)
       }
     }

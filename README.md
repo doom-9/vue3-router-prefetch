@@ -1,18 +1,88 @@
-# Vue 3 + TypeScript + Vite
+# vue3-router-prefetch
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+[![NPM version](https://badgen.net/npm/v/vue3-router-prefetch)](https://npmjs.com/package/vue3-router-prefetch) [![NPM downloads](https://badgen.net/npm/dm/vue3-router-prefetch)](https://npmjs.com/package/vue3-router-prefetch)
 
-## Recommended IDE Setup
+## Features
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- Pull resources ahead of time when links appear in view.
+- Pull resources ahead of time when the mouse is overlaid on the link.
+- You don't need to change your code base to make it work.
+- Tiny-size.
 
-## Type Support For `.vue` Imports in TS
+## Install
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+```bash
+yarn add vue3-router-prefetch
+```
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## Usage
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+You need to use this plugin after `vue-router`:
+
+```js
+import { createApp } from 'vue'
+import { createRouter } from 'vue-router'
+import RouterPrefetch from 'vue3-router-prefetch'
+
+const app = createApp()
+const router = createRouter()
+app.use(router)
+app.use(RouterPrefetch)
+```
+
+Then you can use `<router-link>` without any changes, when this component is visible in viewport, it will automatically prefetch the (async) route component.
+
+You can also register it as a new component instead of overriding `<router-link>`:
+
+```js
+app.use(RouterPrefetch, {
+  componentName: 'QuickLink',
+})
+```
+
+Now you can use it as `<quick-link>` in your app.
+
+## Browser Support
+
+- [Support situation](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
+
+## Props
+
+All [props](https://router.vuejs.org/api/#router-link-props) of `<router-link>` are still available, additional props are listed below.
+
+### type
+
+- Type: `'view' | 'hover' | 'none'`
+- Default: `hover`
+
+How to pull resources in advance.
+
+It can also be defined globally:
+
+```js
+app.use(RouterPrefetch, {
+  type: 'view',
+})
+```
+
+### timeout
+
+- Type: `number`
+- Default: `2000` (ms)
+
+Timeout after which prefetching will occur.
+
+<!-- ## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+
+## Author
+
+**vue3-router-prefetch** © EGOIST, Released under the [MIT](./LICENSE) License.<br>
+Authored and maintained by EGOIST with help from contributors ([list](https://github.com/egoist/vue3-router-prefetch/contributors)).
+
+> [Website](https://egoist.sh) · GitHub [@EGOIST](https://github.com/egoist) · Twitter [@\_egoistlily](https://twitter.com/_egoistlily) -->

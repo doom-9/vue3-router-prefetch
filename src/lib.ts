@@ -3,7 +3,8 @@ import PrefetchLink from './components/PrefetchLink.vue'
 import { linkProvideKey } from './type'
 
 export interface pluginOptions {
-  type: 'view' | 'hover'
+  type: 'view' | 'hover' | 'none'
+  name: string
 }
 
 export default {
@@ -17,6 +18,6 @@ export default {
       )
     }
     app.provide(linkProvideKey, options)
-    app.component('RouterLink', PrefetchLink)
+    app.component(options?.name || 'RouterLink', PrefetchLink)
   },
 }
