@@ -66,6 +66,6 @@ app.use(RouterPrefetch, {
 ### timeout
 
 - Type: `number`
-- Default: `2000` (ms)
+- Default: `0` (ms)
 
 Timeout after which prefetching will occur.
