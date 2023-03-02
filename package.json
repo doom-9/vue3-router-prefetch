@@ -1,7 +1,7 @@
 {
   "name": "vue3-router-prefetch",
   "type": "module",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "homepage": "https://github.com/doom-9/vue3-router-prefetch/blob/main/README.md",
   "repository": {
     "type": "git",
