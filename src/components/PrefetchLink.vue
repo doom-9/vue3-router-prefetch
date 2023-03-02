@@ -50,6 +50,7 @@ interface RouterLinkProps {
    */
   replace?: boolean
   type?: 'view' | 'hover' | 'none'
+  timeout?: number
 }
 
 const props = defineProps<RouterLinkProps>()
@@ -65,11 +66,11 @@ const mergedType = ref<'view' | 'hover' | 'none'>('hover')
 watchEffect(() => {
   if (props.type)
     mergedType.value = props.type
-  else mergedType.value = linkInjectValue?.type || 'hover'
+  else mergedType.value = linkInjectValue?.type || 'view'
 })
 
 const handleMouseEnter = () => {
-  const { to } = props
+  const { to, timeout = 0 } = props
   if (!to)
     return
 
@@ -82,8 +83,11 @@ const handleMouseEnter = () => {
     for (const name in record.components) {
       const rawComponent = record.components[name]
 
-      if (!isRouteComponent(rawComponent))
-        (rawComponent as Lazy<RouteComponent>)()
+      if (!isRouteComponent(rawComponent)) {
+        setTimeout(() => {
+          (rawComponent as Lazy<RouteComponent>)()
+        }, timeout)
+      }
     }
   }
 }
