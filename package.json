@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "cypress:open": "cypress open",
-    "publish": "vue-tsc && vite build && np --no-tests"
+    "publish": "vue-tsc && vite build && np --no-tests --no-publish"
   },
   "exports": {
     ".": {
