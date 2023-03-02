@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "publish": "vue-tsc && vite build && np --no-tests"
   },
   "exports": {
     ".": {
@@ -36,6 +37,7 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "cypress": "^12.7.0",
     "eslint": "^8.34.0",
+    "np": "^7.6.3",
     "typescript": "^4.9.3",
     "vite": "^4.1.0",
     "vite-plugin-dts": "^2.0.2",
