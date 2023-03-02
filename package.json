@@ -23,7 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "npx simple-git-hooks",
+    "postinstall": "npx simple-git-hooks",
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
