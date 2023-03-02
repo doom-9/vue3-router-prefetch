@@ -10,7 +10,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/lib.ts'),
       fileName: 'lib',
-      name: 'vue3RouterPrefetch',
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: ['vue', 'vue-router'],
