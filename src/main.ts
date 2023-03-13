@@ -8,15 +8,15 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('./one.vue'),
+      component: () => import('./testPage/one.vue'),
     },
     {
       path: '/two',
-      component: () => import('./two.vue'),
+      component: () => import('./testPage/two.vue'),
     },
     {
       path: '/three',
-      component: () => import('./three.vue'),
+      component: () => import('./testPage/three.vue'),
     },
   ],
 })

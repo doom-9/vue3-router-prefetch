@@ -77,6 +77,20 @@ app.use(RouterPrefetch, {
 })
 ```
 
+
+### name
+
+- Type: `string`
+- Default: `RouterLink`
+
+Register component name
+
+```js
+app.use(RouterPrefetch, {
+  name: 'QuickLink',
+})
+```
+
 ### forcedPull
 
 - Type: `boolean`
