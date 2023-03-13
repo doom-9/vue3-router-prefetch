@@ -84,7 +84,7 @@ watchEffect(() => {
     mergedForcedPull.value = linkInjectValue?.forcedPull
 })
 
-const handleMouseEnter = () => {
+const handlePullResources = () => {
   const { to } = props
   if (!to)
     return
@@ -122,18 +122,21 @@ onMounted(() => {
       if (mergedType.value === 'view') {
         linkElementRef.value.removeEventListener(
           'mouseenter',
-          handleMouseEnter,
+          handlePullResources,
         )
-        beginObserve(linkElementRef.value, handleMouseEnter)
+        beginObserve(linkElementRef.value, handlePullResources)
       }
       else if (mergedType.value === 'hover') {
-        linkElementRef.value.addEventListener('mouseenter', handleMouseEnter)
+        linkElementRef.value.addEventListener(
+          'mouseenter',
+          handlePullResources,
+        )
         stopObserve(linkElementRef.value)
       }
       else if (mergedType.value === 'none') {
         linkElementRef.value.removeEventListener(
           'mouseenter',
-          handleMouseEnter,
+          handlePullResources,
         )
         stopObserve(linkElementRef.value)
       }
